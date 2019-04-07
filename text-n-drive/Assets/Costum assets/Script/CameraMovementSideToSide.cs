@@ -8,7 +8,7 @@ public class CameraMovementSideToSide : MonoBehaviour
     void Start()
     {
         Time.timeScale = timeScaler;
-        currentPos = currentPos;
+        currentPos = positionCenter;
         transform.position = new Vector3(currentPos, transform.position.y, transform.position.z);
     }
     public float positionLeft = -0.035f;

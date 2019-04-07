@@ -62,8 +62,10 @@
   <ItemGroup>
     <Compile Include="Assets\Costum assets\Script\CameraMovementSideToSide.cs" />
     <Compile Include="Assets\Costum assets\Script\changeInputText.cs" />
+    <Compile Include="Assets\Costum assets\Script\commentScript.cs" />
     <Compile Include="Assets\Costum assets\Script\LineGeneratorScript.cs" />
     <Compile Include="Assets\Costum assets\Script\ObstacleDeplacment.cs" />
+    <Compile Include="Assets\Costum assets\Script\OrangeCarScaling.cs" />
     <Compile Include="Assets\Costum assets\Script\RoadLineMovingDown.cs" />
     <Compile Include="Assets\Costum assets\Script\selfDestroyMovingDown.cs" />
     <Compile Include="Assets\SampleScenes\Menu\Scripts\MenuSceneLoader.cs" />
