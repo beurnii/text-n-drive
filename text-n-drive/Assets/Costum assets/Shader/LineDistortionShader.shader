@@ -10,7 +10,10 @@ Shader "Custom/LineDistortion"
 	{
 		[PerRendererData] _MainTex("Sprite Texture", 2D) = "white" {}
 		_Color("Color", Color) = (1,1,1,1)
-		_cstLength ("Length", float) = 5
+		_cstWidth("DisScaling", float) = 5
+		//_lengthDis("Length Distortion Scaler", float) = 1
+		_initHeight("Initial Height", float) = 0
+		_sideSpeed("Side Speed", float) = 2.5
 	}
 
 	SubShader
@@ -27,43 +30,39 @@ Shader "Custom/LineDistortion"
 		#pragma fragment fragmentFunc
 		#include "UnityCG.cginc"
 
-		struct Vertex
-		{
-			float4 vertex : POSITION;
-			float2 uv_MainTex : TEXCOORD0;
-			float2 uv2 : TEXCOORD1;
-		};
      
 		sampler2D _MainTex;
 
 		struct v2f {
 			float4 pos : SV_POSITION;
 			half2 uv : TEXCOORD0;
+			float4 color : COLOR;
 		};
 
-		float _cstLength;
+		float _cstWidth;
+		//float _lengthDis = 2;
+		float _initHeight;
+		float _sideSpeed;
 
-		v2f vertexFunc(appdata_base v) {
+		v2f vertexFunc(appdata_full v) {
 			v2f o;
 			o.pos = UnityObjectToClipPos(v.vertex);
 			o.uv = v.texcoord;
-			float3 worldPos = mul(unity_ObjectToWorld, v.vertex).xyz;
+			o.color = v.color;
 
-			if (worldPos.y < 0) {
-				o.pos.y = o.pos.y * o.pos.y *-1;
-				o.pos.x = o.pos.x + o.pos.x * -o.pos.y*4;
-			}
+			o.pos.y = pow((o.pos.y - _initHeight /5), 5) * 1 + _initHeight /5;
+			o.pos.y *= 1 + abs(o.pos.x)*_sideSpeed;
+
+			o.pos.x = o.pos.x - o.pos.x * (o.pos.y - _initHeight / 5)*_cstWidth;
 
 			return o;
 		}
 
-		float4 _Color;
-		float4 _MaintTex_TexelSize;
+		fixed4 fragmentFunc(v2f i) : SV_Target{
+			float4 mainTexture = tex2D(_MainTex, i.uv.xy);
 
-		fixed4 fragmentFunc(v2f i) : COLOR{
-			float4 c = tex2D(_MainTex, i.uv);
-			c = _Color;
-			return c;
+
+			return mainTexture;
 		}
 
 

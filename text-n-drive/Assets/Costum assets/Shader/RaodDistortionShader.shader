@@ -10,7 +10,8 @@ Shader "Custom/RoadDistortion"
 	{
 		[PerRendererData] _MainTex("Sprite Texture", 2D) = "white" {}
 		_Color("Color", Color) = (1,1,1,1)
-		_cstLength ("Length", float) = 5
+		_cstWidth ("DisScaling", float) = 5
+
 	}
 
 	SubShader
@@ -26,6 +27,11 @@ Shader "Custom/RoadDistortion"
 		#pragma vertex vertexFunc
 		#pragma fragment fragmentFunc
 		#include "UnityCG.cginc"
+		//#pragma target 2.0
+		//#pragma multi_compile_instancing
+		//#pragma multi_compile _ PIXELSNAP_ON
+		//#pragma multi_compile _ ETC1_EXTERNAL_ALPHA
+		//#include "UnitySprites.cginc"
 
 		struct Vertex
 		{
@@ -39,18 +45,20 @@ Shader "Custom/RoadDistortion"
 		struct v2f {
 			float4 pos : SV_POSITION;
 			half2 uv : TEXCOORD0;
+			float4 color : COLOR;
 		};
 
-		float _cstLength;
+		float _cstWidth;
 
-		v2f vertexFunc(appdata_base v) {
+		v2f vertexFunc(appdata_full v) {
 			v2f o;
 			o.pos = UnityObjectToClipPos(v.vertex);
 			o.uv = v.texcoord;
+			o.color = v.color;
 			float3 worldPos = mul(unity_ObjectToWorld, v.vertex).xyz;
 			
 			if (worldPos.y < 0) {
-				o.pos.x = o.pos.x + o.pos.x * -o.pos.y*4;
+				o.pos.x = o.pos.x + o.pos.x * -o.pos.y*_cstWidth;
 			}
 
 			return o;
@@ -59,10 +67,8 @@ Shader "Custom/RoadDistortion"
 		float4 _Color;
 		float4 _MaintTex_TexelSize;
 
-		fixed4 fragmentFunc(v2f i) : COLOR{
-			float4 c = tex2D(_MainTex, i.uv);
-			c = _Color;
-			return c;
+		fixed4 fragmentFunc(v2f i) : SV_Target {
+			return i.color;
 		}
 
 

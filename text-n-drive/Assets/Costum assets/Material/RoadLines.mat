@@ -79,6 +79,10 @@ Material:
     - _UVSec: 0
     - _ZWrite: 1
     - _cstLength: 1.5
+    - _cstWidth: 223.3
+    - _initHeight: 2
+    - _lengthDis: 1
+    - _sideSpeed: -2
     - _test: 15
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
