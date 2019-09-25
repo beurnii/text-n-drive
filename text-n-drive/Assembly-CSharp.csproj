@@ -60,14 +60,21 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Costum assets\Script\BroadCastToObstacle.cs" />
     <Compile Include="Assets\Costum assets\Script\CameraMovementSideToSide.cs" />
+    <Compile Include="Assets\Costum assets\Script\CameraUpAndDown.cs" />
     <Compile Include="Assets\Costum assets\Script\changeInputText.cs" />
+    <Compile Include="Assets\Costum assets\Script\ColisionChecker.cs" />
     <Compile Include="Assets\Costum assets\Script\commentScript.cs" />
     <Compile Include="Assets\Costum assets\Script\LineGeneratorScript.cs" />
+    <Compile Include="Assets\Costum assets\Script\ObstacleCarLineChange.cs" />
     <Compile Include="Assets\Costum assets\Script\ObstacleDeplacment.cs" />
     <Compile Include="Assets\Costum assets\Script\OrangeCarScaling.cs" />
+    <Compile Include="Assets\Costum assets\Script\OrangeCarSpawner.cs" />
     <Compile Include="Assets\Costum assets\Script\RoadLineMovingDown.cs" />
     <Compile Include="Assets\Costum assets\Script\selfDestroyMovingDown.cs" />
+    <Compile Include="Assets\Costum assets\Script\SwipeDetector.cs" />
+    <Compile Include="Assets\Costum assets\Script\TouchDetectionScript.cs" />
     <Compile Include="Assets\SampleScenes\Menu\Scripts\MenuSceneLoader.cs" />
     <Compile Include="Assets\SampleScenes\Menu\Scripts\PauseMenu.cs" />
     <Compile Include="Assets\SampleScenes\Menu\Scripts\SceneAndURLLoader.cs" />
@@ -83,6 +90,7 @@
     <None Include="Assets\TextMesh Pro\Resources\Shaders\TMP_Bitmap-Custom-Atlas.shader" />
     <None Include="Assets\Costum assets\Shader\SideLineDistortionShader.shader" />
     <None Include="Assets\Costum assets\Shader\LineDistortionShader.shader" />
+    <None Include="Assets\Costum assets\Shader\LineDistortionShaderTester.shader" />
     <None Include="Assets\TextMesh Pro\Resources\LineBreaking Following Characters.txt" />
     <None Include="Assets\TextMesh Pro\Sprites\EmojiOne Attribution.txt" />
     <None Include="Assets\TextMesh Pro\Resources\Shaders\TMP_SDF-Mobile Masking.shader" />

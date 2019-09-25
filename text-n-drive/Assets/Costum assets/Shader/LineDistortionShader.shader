@@ -40,20 +40,30 @@ Shader "Custom/LineDistortion"
 		};
 
 		float _cstWidth;
-		//float _lengthDis = 2;
 		float _initHeight;
 		float _sideSpeed;
 
 		v2f vertexFunc(appdata_full v) {
 			v2f o;
-			o.pos = UnityObjectToClipPos(v.vertex);
 			o.uv = v.texcoord;
 			o.color = v.color;
 
-			o.pos.y = pow((o.pos.y - _initHeight /5), 5) * 1 + _initHeight /5;
-			o.pos.y *= 1 + abs(o.pos.x)*_sideSpeed;
+			float3 camPos = _WorldSpaceCameraPos;
+			float4 screenPos = UnityObjectToClipPos(v.vertex);
+			float4 worldPos = mul(unity_ObjectToWorld, v.vertex);
 
-			o.pos.x = o.pos.x - o.pos.x * (o.pos.y - _initHeight / 5)*_cstWidth;
+			worldPos.x /= 2.8;
+			worldPos.y /= 5;
+			o.pos = screenPos;
+
+			float YPos = (pow((worldPos.y - _initHeight / 5), 5) + _initHeight / 5) * (1 + abs(worldPos.x)*_sideSpeed);
+			float cstX = (1 - (YPos - _initHeight / 5)*_cstWidth);
+			float XPos = screenPos.x * cstX;
+
+			YPos -= camPos.y / 5;
+
+			o.pos.y = YPos;
+			o.pos.x = XPos;
 
 			return o;
 		}

@@ -27,11 +27,8 @@ Shader "Custom/RoadDistortion"
 		#pragma vertex vertexFunc
 		#pragma fragment fragmentFunc
 		#include "UnityCG.cginc"
-		//#pragma target 2.0
-		//#pragma multi_compile_instancing
-		//#pragma multi_compile _ PIXELSNAP_ON
-		//#pragma multi_compile _ ETC1_EXTERNAL_ALPHA
-		//#include "UnitySprites.cginc"
+		#pragma multi_compile_instancing
+		#pragma multi_compile _ PIXELSNAP_ON
 
 		struct Vertex
 		{
@@ -52,13 +49,17 @@ Shader "Custom/RoadDistortion"
 
 		v2f vertexFunc(appdata_full v) {
 			v2f o;
-			o.pos = UnityObjectToClipPos(v.vertex);
 			o.uv = v.texcoord;
 			o.color = v.color;
-			float3 worldPos = mul(unity_ObjectToWorld, v.vertex).xyz;
+
+			float4 screenPos = UnityObjectToClipPos(v.vertex);
+			float4 worldPos = mul(unity_ObjectToWorld, v.vertex);
+			worldPos.y /= 5;
+			o.pos = screenPos;
+
 			
 			if (worldPos.y < 0) {
-				o.pos.x = o.pos.x + o.pos.x * -o.pos.y*_cstWidth;
+				o.pos.x = o.pos.x + o.pos.x * -worldPos.y*_cstWidth;
 			}
 
 			return o;
@@ -76,3 +77,22 @@ Shader "Custom/RoadDistortion"
 		}
 	}
 }
+
+//
+//v2f vertexFunc(appdata_full v) {
+//	v2f o;
+//	o.pos = UnityObjectToClipPos(v.vertex);
+//	o.uv = v.texcoord;
+//	o.color = v.color;
+//	float3 worldPos = mul(unity_ObjectToWorld, v.vertex).xyz;
+//	float3 camPos = _WorldSpaceCameraPos;
+//
+//
+//	if (worldPos.y < 0) {
+//		o.pos.x = o.pos.x + o.pos.x * -o.pos.y*_cstWidth;
+//	}
+//
+//	o.pos.y -= camPos.y / 5;
+//
+//	return o;
+//}

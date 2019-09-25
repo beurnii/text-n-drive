@@ -10,6 +10,7 @@ public class CameraMovementSideToSide : MonoBehaviour
         Time.timeScale = timeScaler;
         currentPos = positionCenter;
         transform.position = new Vector3(currentPos, transform.position.y, transform.position.z);
+        ObstacleManager.UpdateChildrenPosition(lineNum);
     }
     public float positionLeft = -0.035f;
     public float positionCenter = -0.002f;
@@ -23,6 +24,7 @@ public class CameraMovementSideToSide : MonoBehaviour
     float startPos = 0;
     float currentPos = 0;
 
+    public BroadCastToObstacle ObstacleManager;
 
     // Update is called once per frame
     void Update()
@@ -36,6 +38,9 @@ public class CameraMovementSideToSide : MonoBehaviour
                 startPos = currentPos;
                 arrivingTime = Time.time + timeToChangeLine;
                 lineNum = 0;
+
+                ObstacleManager.UpdateChildrenPosition(lineNum);
+                
             }
             else
             {
@@ -43,6 +48,9 @@ public class CameraMovementSideToSide : MonoBehaviour
                 endPos = positionCenter;
                 arrivingTime = Time.time + timeToChangeLine;
                 lineNum = 1;
+
+                ObstacleManager.UpdateChildrenPosition(lineNum);
+
             }
         }
         if (Input.GetKeyUp(KeyCode.RightArrow))
@@ -56,13 +64,18 @@ public class CameraMovementSideToSide : MonoBehaviour
                 startPos = currentPos;
                 arrivingTime = Time.time + timeToChangeLine;
                 lineNum = 2;
-            }
-            else
+
+                ObstacleManager.UpdateChildrenPosition(lineNum);
+
+            } else
             {
                 startPos = currentPos;
                 endPos = positionCenter;
                 arrivingTime = Time.time + timeToChangeLine;
                 lineNum = 1;
+
+                ObstacleManager.UpdateChildrenPosition(lineNum);
+
             }
         }
         if (endPos != startPos)

@@ -56,9 +56,10 @@ Shader "Custom/SideLineDistortion"
 			o.uv = v.texcoord;
 			o.color = v.color;
 			float3 worldPos = mul(unity_ObjectToWorld, v.vertex).xyz;
-			
+			worldPos.y /= 5;
+
 			if (worldPos.y < 0) {
-				o.pos.x = o.pos.x + o.pos.x * -o.pos.y*_cstWidth;
+				o.pos.x = o.pos.x + o.pos.x * -worldPos.y*_cstWidth;
 			}
 
 			return o;
