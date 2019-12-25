@@ -1,4 +1,0 @@
-sceneSetups:
-- path: Assets/Costum assets/Scenes/inGameScene.unity
-  isLoaded: 1
-  isActive: 1
