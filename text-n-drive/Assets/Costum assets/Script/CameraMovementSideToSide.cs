@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class CameraMovementSideToSide : MonoBehaviour
 {
@@ -10,8 +11,9 @@ public class CameraMovementSideToSide : MonoBehaviour
         Time.timeScale = timeScaler;
         currentPos = positionCenter;
         transform.position = new Vector3(currentPos, transform.position.y, transform.position.z);
-        ObstacleManager.UpdateChildrenPosition(lineNum);
+        if (updateCamPosEvent != null) updateCamPosEvent.Invoke(lineNum);
     }
+
     public float positionLeft = -0.035f;
     public float positionCenter = -0.002f;
     public float positionRight = 0.03f;
@@ -24,65 +26,66 @@ public class CameraMovementSideToSide : MonoBehaviour
     float startPos = 0;
     float currentPos = 0;
 
-    public BroadCastToObstacle ObstacleManager;
+    //public BroadCastToObstacle ObstacleManager;
+    public static System.Action<int> updateCamPosEvent;
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyUp(KeyCode.LeftArrow)){
-            if (lineNum == 0)
-            {
-            }
-            else if (lineNum == 1){
-                endPos = positionLeft;
-                startPos = currentPos;
-                arrivingTime = Time.time + timeToChangeLine;
-                lineNum = 0;
-
-                ObstacleManager.UpdateChildrenPosition(lineNum);
-                
-            }
-            else
-            {
-                startPos = currentPos;
-                endPos = positionCenter;
-                arrivingTime = Time.time + timeToChangeLine;
-                lineNum = 1;
-
-                ObstacleManager.UpdateChildrenPosition(lineNum);
-
-            }
-        }
-        if (Input.GetKeyUp(KeyCode.RightArrow))
-        {
-            if (lineNum == 2)
-            {
-            }
-            else if (lineNum == 1)
-            {
-                endPos = positionRight;
-                startPos = currentPos;
-                arrivingTime = Time.time + timeToChangeLine;
-                lineNum = 2;
-
-                ObstacleManager.UpdateChildrenPosition(lineNum);
-
-            } else
-            {
-                startPos = currentPos;
-                endPos = positionCenter;
-                arrivingTime = Time.time + timeToChangeLine;
-                lineNum = 1;
-
-                ObstacleManager.UpdateChildrenPosition(lineNum);
-
-            }
-        }
         if (endPos != startPos)
         {
             deplacement();
         }
+    }
 
+    public void SwipeLeftHandler()
+    {
+        if (lineNum == 2)
+        {
+        } else if (lineNum == 1)
+        {
+            endPos = positionRight;
+            startPos = currentPos;
+            arrivingTime = Time.time + timeToChangeLine;
+            lineNum = 2;
+
+            if (updateCamPosEvent != null) updateCamPosEvent.Invoke(lineNum);
+
+        } else
+        {
+            startPos = currentPos;
+            endPos = positionCenter;
+            arrivingTime = Time.time + timeToChangeLine;
+            lineNum = 1;
+
+            if (updateCamPosEvent != null) updateCamPosEvent.Invoke(lineNum);
+
+        }
+    }
+
+    public void SwipeRightHandler()
+    {
+        if (lineNum == 0)
+        {
+        } else if (lineNum == 1)
+        {
+            endPos = positionLeft;
+            startPos = currentPos;
+            arrivingTime = Time.time + timeToChangeLine;
+            lineNum = 0;
+
+            if (updateCamPosEvent != null) updateCamPosEvent.Invoke(lineNum);
+
+        } else
+        {
+            startPos = currentPos;
+            endPos = positionCenter;
+            arrivingTime = Time.time + timeToChangeLine;
+            lineNum = 1;
+
+            if (updateCamPosEvent != null) updateCamPosEvent.Invoke(lineNum);
+
+        }
     }
 
     void deplacement()

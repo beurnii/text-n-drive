@@ -1,9 +1,9 @@
 ﻿using UnityEngine;
+using System.Collections;
 
 public class ObstacleCarLineChange : MonoBehaviour
 {
     public int lineNumber;
-    public int speed;
     int camPos = 1;
 
     public float timeToChangeLine = 0.5f;
@@ -51,8 +51,6 @@ public class ObstacleCarLineChange : MonoBehaviour
     {
         Random.seed = System.DateTime.Now.Millisecond;
         lineNumber = Random.Range(0, 3);
-        BroadCastToObstacle broadCastToObstacleComponent = gameObject.GetComponentInParent<BroadCastToObstacle>();
-        camPos = broadCastToObstacleComponent.camPos;
     }
 
     // Update is called once per frame
@@ -80,9 +78,15 @@ public class ObstacleCarLineChange : MonoBehaviour
         }
     }
 
-    void MovingDownTheRoad()
+    void OnEnable()
     {
+        CameraMovementSideToSide.updateCamPosEvent += UpdateCamPosition;
+    }
 
+
+    void OnDisable()
+    {
+        CameraMovementSideToSide.updateCamPosEvent -= UpdateCamPosition;
     }
 
     public void UpdateCamPosition(int pos)

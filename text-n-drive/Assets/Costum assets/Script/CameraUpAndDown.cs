@@ -23,32 +23,33 @@ public class CameraUpAndDown : MonoBehaviour
     float startPos = 0;
     float currentPos = 0;
 
-
-    // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyUp(KeyCode.UpArrow))
-        {
-            if (currentPositionIsDown)
-            {
-                currentPositionIsDown = false;
-                endPos = positionUp;
-                startPos = currentPos;
-                arrivingTime = Time.time + transitionTime;
-            }
-        } else if (Input.GetKeyUp(KeyCode.DownArrow))
-        {
-            if (!currentPositionIsDown)
-            {
-                currentPositionIsDown = true;
-                endPos = positionDown;
-                startPos = currentPos;
-                arrivingTime = Time.time + transitionTime;
-            }
-        }
         if (endPos != startPos)
         {
             deplacement();
+        }
+    }
+
+    public void OnSwipeUpHandler()
+    {
+        if (!currentPositionIsDown)
+        {
+            currentPositionIsDown = true;
+            endPos = positionDown;
+            startPos = currentPos;
+            arrivingTime = Time.time + transitionTime;
+        }
+    }
+
+    public void OnSwipeDownHandler()
+    {
+        if (currentPositionIsDown)
+        {
+            currentPositionIsDown = false;
+            endPos = positionUp;
+            startPos = currentPos;
+            arrivingTime = Time.time + transitionTime;
         }
     }
 
