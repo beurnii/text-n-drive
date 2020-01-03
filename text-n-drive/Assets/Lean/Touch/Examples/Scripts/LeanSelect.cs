@@ -87,14 +87,15 @@ namespace Lean.Touch
 		// NOTE: This must be called from somewhere
 		public void SelectScreenPosition(LeanFinger finger)
 		{
-			SelectScreenPosition(finger, finger.ScreenPosition);
+            Debug.Log("toc");
+            SelectScreenPosition(finger, finger.ScreenPosition);
 		}
 
 		// NOTE: This must be called from somewhere
 		public void SelectScreenPosition(LeanFinger finger, Vector2 screenPosition)
 		{
-			// Stores the component we hit (Collider or Collider2D)
-			var component = default(Component);
+            // Stores the component we hit (Collider or Collider2D)
+            var component = default(Component);
 
 			TryGetComponent(SelectUsing, screenPosition, ref component);
 
