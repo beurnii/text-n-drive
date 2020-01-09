@@ -63,40 +63,20 @@ namespace Lean.Touch
         [Tooltip("If you select an already selected selectable, what should happen?")]
         public ReselectType Reselect = ReselectType.SelectAgain;
 
-        // Start is called before the first frame update
-        void Start()
-        {
-
-        }
-
-        // Update is called once per frame
-        void Update()
-        {
-
-        }
-
         public void SelectStartScreenPosition(LeanFinger finger)
         {
-            Debug.Log("Tap1");
             SelectScreenPosition(finger, finger.StartScreenPosition);
         }
 
         // NOTE: This must be called from somewhere
         public void SelectScreenPosition(LeanFinger finger)
         {
-            Debug.Log("Tap12");
             SelectScreenPosition(finger, finger.ScreenPosition);
         }
-
-        //public void SelectScreenPosition()
-        //{
-        //    Debug.Log("Tap");
-        //}
 
         // NOTE: This must be called from somewhere
         public void SelectScreenPosition(LeanFinger finger, Vector2 screenPosition)
         {
-            Debug.Log("Tap0000000000000");
             // Stores the component we hit (Collider or Collider2D)
             var component = default(Component);
 
@@ -172,87 +152,87 @@ namespace Lean.Touch
 
         public void Select(LeanFinger finger, Component component)
         {
-            Debug.Log("toto");
             // Stores the selectable we will search for
-            var selectable = default(LeanSelectable);
+            var selectable = default(KeyPressAction);
 
             // Was a collider found?
             if (component != null)
             {
                 switch (Search)
                 {
-                    case SearchType.GetComponent: selectable = component.GetComponent<LeanSelectable>(); break;
-                    case SearchType.GetComponentInParent: selectable = component.GetComponentInParent<LeanSelectable>(); break;
-                    case SearchType.GetComponentInChildren: selectable = component.GetComponentInChildren<LeanSelectable>(); break;
+                    case SearchType.GetComponent: selectable = component.GetComponent<KeyPressAction>(); break;
+                    case SearchType.GetComponentInParent: selectable = component.GetComponentInParent<KeyPressAction>(); break;
+                    case SearchType.GetComponentInChildren: selectable = component.GetComponentInChildren<KeyPressAction>(); break;
                 }
             }
-
             // Select the selectable
             Select(finger, selectable);
         }
 
-        public void Select(LeanFinger finger, LeanSelectable selectable)
+        public void Select(LeanFinger finger, KeyPressAction selectable)
         {
+            //selectable.Select(finger);
             // Something was selected?
             if (selectable != null && selectable.isActiveAndEnabled == true)
             {
-                if (selectable.HideWithFinger == true)
-                {
-                    foreach (var otherSelectable in LeanSelectable.Instances)
-                    {
-                        if (otherSelectable.HideWithFinger == true && otherSelectable.IsSelected == true)
-                        {
-                            return;
-                        }
-                    }
-                }
+                //if (selectable.HideWithFinger == true)
+                //{
+                //    foreach (var otherSelectable in KeyPressAction.Instances)
+                //    {
+                //        if (otherSelectable.HideWithFinger == true && otherSelectable.IsSelected == true)
+                //        {
+                //            return;
+                //        }
+                //    }
+                //}
 
-            //    // Did we select a new LeanSelectable?
-            //    if (selectable.IsSelected == false)
-            //    {
-            //        // Deselect some if we have too many
-            //        if (MaxSelectables > 0)
-            //        {
-            //            LeanSelectable.Cull(MaxSelectables - 1);
-            //        }
+                selectable.KeyPress();
 
-            //        // Select
-            //        selectable.Select(finger);
-            //    }
-            //    // Did we reselect the current LeanSelectable?
-            //    else
-            //    {
-            //        switch (Reselect)
-            //        {
-            //            case ReselectType.Deselect:
-            //                {
-            //                    selectable.Deselect();
-            //                }
-            //                break;
+                //// Did we select a new LeanSelectable?
+                //if (selectable.IsSelected == false)
+                //{
+                //    // Deselect some if we have too many
+                //    if (MaxSelectables > 0)
+                //    {
+                //        LeanSelectable.Cull(MaxSelectables - 1);
+                //    }
 
-            //            case ReselectType.DeselectAndSelect:
-            //                {
-            //                    selectable.Deselect();
-            //                    selectable.Select(finger);
-            //                }
-            //                break;
+                //    // Select
+                //}
+                //    // Did we reselect the current LeanSelectable?
+                //    else
+                //    {
+                //        switch (Reselect)
+                //        {
+                //            case ReselectType.Deselect:
+                //                {
+                //                    selectable.Deselect();
+                //                }
+                //                break;
 
-            //            case ReselectType.SelectAgain:
-            //                {
-            //                    selectable.Select(finger);
-            //                }
-            //                break;
-            //        }
-            //    }
-            //}
-            //// Nothing was selected?
-            //else
-            //{
-            //    // Deselect?
-            //    if (AutoDeselect == true)
-            //    {
-            //        DeselectAll();
-            //    }
+                //            case ReselectType.DeselectAndSelect:
+                //                {
+                //                    selectable.Deselect();
+                //                    selectable.Select(finger);
+                //                }
+                //                break;
+
+                //            case ReselectType.SelectAgain:
+                //                {
+                //                    selectable.Select(finger);
+                //                }
+                //                break;
+                //        }
+                //    }
+                //}
+                //// Nothing was selected?
+                //else
+                //{
+                //    // Deselect?
+                //    if (AutoDeselect == true)
+                //    {
+                //        DeselectAll();
+                //    }
             }
         }
     }

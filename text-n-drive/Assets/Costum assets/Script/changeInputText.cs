@@ -2,25 +2,33 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-
-using TMPro;
+using UnityEngine.Events;
 
 public class changeInputText : MonoBehaviour
 {
     public GameObject textObject;
-    private TMP_Text textComponent;
-    private int compteur = 0;
-    public string baseStr = "cheval";
+    private Text textComponent;
+    private int counter = 0;
+    public string baseStr = "test text";
     private string[] strArray;
- 
+    [Header("Events")]
+    public UnityEvent messageCompleteEvent;
+
 
     // Start is called before the first frame update
-    void Start(){
-        textComponent = textObject.GetComponent<TMP_Text>();
+    void Start()
+    {
+        textComponent = textObject.GetComponent<Text>();
+        start();
+    }
+
+    private void start()
+    {
         textComponent.text = baseStr;
         strArray = new string[baseStr.Length];
-        for( int i = 0; i < baseStr.Length; i++){
-            strArray[i] = "<color=black>"+baseStr[i]+"</color>";
+        for (int i = 0; i < baseStr.Length; i++)
+        {
+            strArray[i] = "<color=black>" + baseStr[i] + "</color>";
         }
         newDisplayStr();
     }
@@ -30,29 +38,54 @@ public class changeInputText : MonoBehaviour
     {
     }
 
+    void OnEnable()
+    {
+        KeyPressAction.keyPress += KeyPressEventHandler;
+
+    }
+
+    void OnDisable()
+    {
+        KeyPressAction.keyPress -= KeyPressEventHandler;
+    }
+
     private void newDisplayStr()
     {
         string str = "";
-        foreach(string s in strArray)
+        foreach (string s in strArray)
         {
             str += s;
         }
 
         textComponent.text = str;
-
+        if (baseStr.Length == counter)
+        {
+            if (messageCompleteEvent != null)
+                messageCompleteEvent.Invoke();
+            Restart();
+        }
     }
 
-    public void updatetext(string c) {
-        if (compteur >= baseStr.Length) return;
-        if (baseStr[compteur] == c[0])
+    public void KeyPressEventHandler(string c)
+    {
+        if (counter >= baseStr.Length) return;
+        if (baseStr[counter] == c[0])
         {
-            strArray[compteur] = "<color=green>" + baseStr[compteur] + "</color>";
-        }
-        else
+            strArray[counter] = "<color=green>" + baseStr[counter] + "</color>";
+            counter++;
+        } else
         {
-            strArray[compteur] = "<color=red>" + baseStr[compteur] + "</color>";
+            if (baseStr[counter] == ' ')
+                strArray[counter] = "<color=red>" + "_" + "</color>";
+            else
+                strArray[counter] = "<color=red>" + baseStr[counter] + "</color>";
         }
-        compteur++;
         newDisplayStr();
+    }
+
+    private void Restart()
+    {
+        counter = 0;
+        start();
     }
 }
