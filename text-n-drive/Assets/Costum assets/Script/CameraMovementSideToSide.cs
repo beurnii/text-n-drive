@@ -21,6 +21,7 @@ public class CameraMovementSideToSide : MonoBehaviour
     float endPos = 0;
     float startPos = 0;
     float currentPos = 0;
+    bool gameOver = false;
 
     //public BroadCastToObstacle ObstacleManager;
     public static System.Action<int> updateCamPosEvent;
@@ -35,53 +36,70 @@ public class CameraMovementSideToSide : MonoBehaviour
         }
     }
 
+    void OnEnable()
+    {
+        ObstacleCarLineChange.gameOverEvent += GameOverEventHandler;
+    }
+
+
+    void OnDisable()
+    {
+        ObstacleCarLineChange.gameOverEvent -= GameOverEventHandler;
+    }
+
     public void SwipeLeftHandler()
     {
-        if (LinePos == 2)
+        if (!gameOver)
         {
-        } else if (LinePos == 1)
-        {
-            endPos = positionRight;
-            startPos = currentPos;
-            arrivingTime = Time.time + timeToChangeLine;
-            LinePos = 2;
+            if (LinePos == 2)
+            {
+            } else if (LinePos == 1)
+            {
+                endPos = positionRight;
+                startPos = currentPos;
+                arrivingTime = Time.time + timeToChangeLine;
+                LinePos = 2;
 
-            if (updateCamPosEvent != null) updateCamPosEvent.Invoke(LinePos);
+                if (updateCamPosEvent != null) updateCamPosEvent.Invoke(LinePos);
 
-        } else
-        {
-            startPos = currentPos;
-            endPos = positionCenter;
-            arrivingTime = Time.time + timeToChangeLine;
-            LinePos = 1;
+            } else
+            {
+                startPos = currentPos;
+                endPos = positionCenter;
+                arrivingTime = Time.time + timeToChangeLine;
+                LinePos = 1;
 
-            if (updateCamPosEvent != null) updateCamPosEvent.Invoke(LinePos);
+                if (updateCamPosEvent != null) updateCamPosEvent.Invoke(LinePos);
 
+            }
         }
     }
 
     public void SwipeRightHandler()
     {
-        if (LinePos == 0)
+        if (!gameOver)
         {
-        } else if (LinePos == 1)
-        {
-            endPos = positionLeft;
-            startPos = currentPos;
-            arrivingTime = Time.time + timeToChangeLine;
-            LinePos = 0;
+            if (LinePos == 0)
+            {
+            } else if (LinePos == 1)
+            {
+                endPos = positionLeft;
+                startPos = currentPos;
+                arrivingTime = Time.time + timeToChangeLine;
+                LinePos = 0;
 
-            if (updateCamPosEvent != null) updateCamPosEvent.Invoke(LinePos);
+                if (updateCamPosEvent != null) updateCamPosEvent.Invoke(LinePos);
 
-        } else
-        {
-            startPos = currentPos;
-            endPos = positionCenter;
-            arrivingTime = Time.time + timeToChangeLine;
-            LinePos = 1;
+            } else
+            {
+                startPos = currentPos;
+                endPos = positionCenter;
+                arrivingTime = Time.time + timeToChangeLine;
+                LinePos = 1;
 
-            if (updateCamPosEvent != null) updateCamPosEvent.Invoke(LinePos);
+                if (updateCamPosEvent != null) updateCamPosEvent.Invoke(LinePos);
 
+            }
         }
     }
 
@@ -89,5 +107,10 @@ public class CameraMovementSideToSide : MonoBehaviour
     {
         currentPos = Mathf.Lerp(startPos, endPos, 1 - (arrivingTime - Time.time) / timeToChangeLine);
         transform.position = new Vector3(currentPos, transform.position.y, transform.position.z);
+    }
+
+    void GameOverEventHandler()
+    {
+        gameOver = true;
     }
 }

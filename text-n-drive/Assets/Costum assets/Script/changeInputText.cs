@@ -13,16 +13,17 @@ public class changeInputText : MonoBehaviour
     private string[] strArray;
     [Header("Events")]
     public UnityEvent messageCompleteEvent;
+    private bool gameOver = false;
 
 
     // Start is called before the first frame update
     void Start()
     {
         textComponent = textObject.GetComponent<Text>();
-        start();
+        Begin();
     }
 
-    private void start()
+    private void Begin()
     {
         textComponent.text = baseStr;
         strArray = new string[baseStr.Length];
@@ -33,20 +34,16 @@ public class changeInputText : MonoBehaviour
         newDisplayStr();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-    }
-
     void OnEnable()
     {
         KeyPressAction.keyPress += KeyPressEventHandler;
-
+        ObstacleCarLineChange.gameOverEvent += GameOverEventHandler;
     }
 
     void OnDisable()
     {
         KeyPressAction.keyPress -= KeyPressEventHandler;
+        ObstacleCarLineChange.gameOverEvent -= GameOverEventHandler;
     }
 
     private void newDisplayStr()
@@ -68,24 +65,32 @@ public class changeInputText : MonoBehaviour
 
     public void KeyPressEventHandler(string c)
     {
-        if (counter >= baseStr.Length) return;
-        if (baseStr[counter] == c[0])
+        if (!gameOver)
         {
-            strArray[counter] = "<color=green>" + baseStr[counter] + "</color>";
-            counter++;
-        } else
-        {
-            if (baseStr[counter] == ' ')
-                strArray[counter] = "<color=red>" + "_" + "</color>";
-            else
-                strArray[counter] = "<color=red>" + baseStr[counter] + "</color>";
+            if (counter >= baseStr.Length) return;
+            if (baseStr[counter] == c[0])
+            {
+                strArray[counter] = "<color=green>" + baseStr[counter] + "</color>";
+                counter++;
+            } else
+            {
+                if (baseStr[counter] == ' ')
+                    strArray[counter] = "<color=red>" + "_" + "</color>";
+                else
+                    strArray[counter] = "<color=red>" + baseStr[counter] + "</color>";
+            }
+            newDisplayStr();
         }
-        newDisplayStr();
     }
 
     private void Restart()
     {
         counter = 0;
-        start();
+        Begin();
+    }
+
+    void GameOverEventHandler()
+    {
+        gameOver = true;
     }
 }

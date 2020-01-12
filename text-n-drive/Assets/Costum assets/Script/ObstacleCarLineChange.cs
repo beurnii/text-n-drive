@@ -5,7 +5,7 @@ public class ObstacleCarLineChange : MonoBehaviour
 {
     public int lineNumber;
     public int CamPos { get; set; } = 1;
-    public UnityEvent gameOverEvent;
+    public static System.Action gameOverEvent;
     public float timeToChangeLine = 0.5f;
     float arrivingTime;
     float endPos = 0;
