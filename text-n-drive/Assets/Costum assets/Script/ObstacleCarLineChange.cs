@@ -1,11 +1,11 @@
 ﻿using UnityEngine;
-using System.Collections;
+using UnityEngine.Events;
 
 public class ObstacleCarLineChange : MonoBehaviour
 {
     public int lineNumber;
-    int camPos = 1;
-
+    public int CamPos { get; set; } = 1;
+    public UnityEvent gameOverEvent;
     public float timeToChangeLine = 0.5f;
     float arrivingTime;
     float endPos = 0;
@@ -53,11 +53,6 @@ public class ObstacleCarLineChange : MonoBehaviour
         lineNumber = Random.Range(0, 3);
     }
 
-    public int CamPos
-    {
-        get { return camPos; }
-        set { camPos = value; }
-    }
 
     // Update is called once per frame
     void Update()
@@ -69,7 +64,7 @@ public class ObstacleCarLineChange : MonoBehaviour
 
     void CheckForSelfDestruct()
     {
-        if (transform.position.y < selfDestructSideLineHeigth && camPos != lineNumber)
+        if (transform.position.y < selfDestructSideLineHeigth && CamPos != lineNumber)
         {
             Destroy(gameObject);
         }
@@ -77,10 +72,12 @@ public class ObstacleCarLineChange : MonoBehaviour
 
     void CheckForColision()
     {
-        if(transform.position.y < higherColider && camPos == lineNumber)
+        if(transform.position.y < higherColider && CamPos == lineNumber)
         {
             Debug.Log("GAMEOVER");
             Destroy(gameObject);
+            if (gameOverEvent != null)
+                gameOverEvent.Invoke();
         }
     }
 
@@ -97,8 +94,8 @@ public class ObstacleCarLineChange : MonoBehaviour
 
     public void UpdateCamPosition(int pos)
     {
-        lastCamPos = camPos;
-        camPos = pos;
+        lastCamPos = CamPos;
+        CamPos = pos;
         SetupDeplacement();
     }
 
@@ -107,18 +104,18 @@ public class ObstacleCarLineChange : MonoBehaviour
         if (startPos != endPos)
         {
             startPos = CalculatePos(lastCamPos);
-            endPos = CalculatePos(camPos);
+            endPos = CalculatePos(CamPos);
             deplacement();
         } else
         {
-            transform.position = new Vector3(CalculatePos(camPos), transform.position.y, transform.position.z);
+            transform.position = new Vector3(CalculatePos(CamPos), transform.position.y, transform.position.z);
         }
 
     }
 
     void SetupDeplacement()
     {
-        endPos = CalculatePos(camPos);
+        endPos = CalculatePos(CamPos);
         startPos = CalculatePos(lastCamPos);
         arrivingTime = Time.time + timeToChangeLine;
     }
