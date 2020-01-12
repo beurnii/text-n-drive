@@ -11,7 +11,7 @@ public class CameraMovementSideToSide : MonoBehaviour
         Time.timeScale = timeScaler;
         currentPos = positionCenter;
         transform.position = new Vector3(currentPos, transform.position.y, transform.position.z);
-        if (updateCamPosEvent != null) updateCamPosEvent.Invoke(lineNum);
+        if (updateCamPosEvent != null) updateCamPosEvent.Invoke(linePos);
     }
 
     public float positionLeft = -0.035f;
@@ -20,7 +20,7 @@ public class CameraMovementSideToSide : MonoBehaviour
     public float timeScaler = 1f;
 
     public float timeToChangeLine = 0.5f;
-    int lineNum = 1;
+    int linePos = 1;
     float arrivingTime;
     float endPos = 0;
     float startPos = 0;
@@ -28,6 +28,11 @@ public class CameraMovementSideToSide : MonoBehaviour
 
     //public BroadCastToObstacle ObstacleManager;
     public static System.Action<int> updateCamPosEvent;
+
+    public int LinePos
+    {
+        get { return linePos; }
+    }
 
     // Update is called once per frame
     void Update()
@@ -40,50 +45,50 @@ public class CameraMovementSideToSide : MonoBehaviour
 
     public void SwipeLeftHandler()
     {
-        if (lineNum == 2)
+        if (linePos == 2)
         {
-        } else if (lineNum == 1)
+        } else if (linePos == 1)
         {
             endPos = positionRight;
             startPos = currentPos;
             arrivingTime = Time.time + timeToChangeLine;
-            lineNum = 2;
+            linePos = 2;
 
-            if (updateCamPosEvent != null) updateCamPosEvent.Invoke(lineNum);
+            if (updateCamPosEvent != null) updateCamPosEvent.Invoke(linePos);
 
         } else
         {
             startPos = currentPos;
             endPos = positionCenter;
             arrivingTime = Time.time + timeToChangeLine;
-            lineNum = 1;
+            linePos = 1;
 
-            if (updateCamPosEvent != null) updateCamPosEvent.Invoke(lineNum);
+            if (updateCamPosEvent != null) updateCamPosEvent.Invoke(linePos);
 
         }
     }
 
     public void SwipeRightHandler()
     {
-        if (lineNum == 0)
+        if (linePos == 0)
         {
-        } else if (lineNum == 1)
+        } else if (linePos == 1)
         {
             endPos = positionLeft;
             startPos = currentPos;
             arrivingTime = Time.time + timeToChangeLine;
-            lineNum = 0;
+            linePos = 0;
 
-            if (updateCamPosEvent != null) updateCamPosEvent.Invoke(lineNum);
+            if (updateCamPosEvent != null) updateCamPosEvent.Invoke(linePos);
 
         } else
         {
             startPos = currentPos;
             endPos = positionCenter;
             arrivingTime = Time.time + timeToChangeLine;
-            lineNum = 1;
+            linePos = 1;
 
-            if (updateCamPosEvent != null) updateCamPosEvent.Invoke(lineNum);
+            if (updateCamPosEvent != null) updateCamPosEvent.Invoke(linePos);
 
         }
     }

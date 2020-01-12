@@ -53,6 +53,12 @@ public class ObstacleCarLineChange : MonoBehaviour
         lineNumber = Random.Range(0, 3);
     }
 
+    public int CamPos
+    {
+        get { return camPos; }
+        set { camPos = value; }
+    }
+
     // Update is called once per frame
     void Update()
     {
