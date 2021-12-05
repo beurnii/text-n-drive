@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 8085150565464378178}
   - component: {fileID: 8085150565464378179}
-  - component: {fileID: 8085150565464378181}
   - component: {fileID: 8085150565464378180}
   - component: {fileID: 8085150565464378183}
   - component: {fileID: 8085150565464378182}
@@ -50,6 +49,7 @@ SpriteRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -61,6 +61,7 @@ SpriteRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -84,19 +85,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &8085150565464378181
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8085150565464378176}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7c05500e463325740bb1a81d78b54a88, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Notes: middle x = 0.43
 --- !u!114 &8085150565464378180
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -151,7 +139,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   lineNumber: 0
-  speed: 0
   timeToChangeLine: 0.15
   cam0Line0_A: -0.0924
   cam0Line0_B: 0.1741
@@ -171,3 +158,6 @@ MonoBehaviour:
   cam1Line2_B: 4.2025
   cam2Line2_A: -0.1411
   cam2Line2_B: 0.3156
+  higherColider: -3.7
+  lowerColider: 0
+  selfDestructSideLineHeigth: -1

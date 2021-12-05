@@ -9,7 +9,7 @@ public class changeInputText : MonoBehaviour
     public GameObject textObject;
     private Text textComponent;
     private int counter = 0;
-    public string baseStr = "test text";
+    private string baseStr;
     private string[] strArray;
     [Header("Events")]
     public UnityEvent messageCompleteEvent;
@@ -20,16 +20,16 @@ public class changeInputText : MonoBehaviour
     void Start()
     {
         textComponent = textObject.GetComponent<Text>();
-        Begin();
     }
 
-    private void Begin()
+    public void newMessageToTypeHandler(string msg)
     {
-        textComponent.text = baseStr;
+        counter = 0;
+        baseStr = msg;
         strArray = new string[baseStr.Length];
         for (int i = 0; i < baseStr.Length; i++)
         {
-            strArray[i] = "<color=black>" + baseStr[i] + "</color>";
+            strArray[i] = "<color=black>" + msg[i] + "</color>";
         }
         newDisplayStr();
     }
@@ -57,9 +57,7 @@ public class changeInputText : MonoBehaviour
         textComponent.text = str;
         if (baseStr.Length == counter)
         {
-            if (messageCompleteEvent != null)
-                messageCompleteEvent.Invoke();
-            Restart();
+            complete();
         }
     }
 
@@ -83,14 +81,15 @@ public class changeInputText : MonoBehaviour
         }
     }
 
-    private void Restart()
-    {
-        counter = 0;
-        Begin();
-    }
-
     void GameOverEventHandler()
     {
         gameOver = true;
+    }
+
+    void complete()
+    {
+        if (messageCompleteEvent != null)
+            messageCompleteEvent.Invoke();
+        textComponent.text = "";
     }
 }

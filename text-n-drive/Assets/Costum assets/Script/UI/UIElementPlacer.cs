@@ -4,9 +4,9 @@ using UnityEngine;
 using UnityEngine.UI;
 
 [ExecuteInEditMode]
-public class CurrentMessagePlacer : MonoBehaviour
+public class UIElementPlacer : MonoBehaviour
 {
-    public Text currentMessage;
+    public GameObject UIElement;
     // Start is called before the first frame update
     void Start()
     {
@@ -16,7 +16,10 @@ public class CurrentMessagePlacer : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Vector3 messagePos = Camera.main.WorldToScreenPoint(this.transform.position);
-        currentMessage.transform.position = messagePos;
+        if (UIElement != null)
+        {
+            Vector3 messagePos = Camera.main.WorldToScreenPoint(this.transform.position);
+            UIElement.transform.position = messagePos;
+        }
     }
 }

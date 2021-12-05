@@ -21,7 +21,6 @@ public class OrangeCarSpawner : MonoBehaviour
         CameraMovementSideToSide.updateCamPosEvent += UpdateCamPosition;
     }
 
-
     void OnDisable()
     {
         CameraMovementSideToSide.updateCamPosEvent -= UpdateCamPosition;
@@ -35,8 +34,6 @@ public class OrangeCarSpawner : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
-
         time += Time.deltaTime;
         if (time >= generatingTiming)
         {
