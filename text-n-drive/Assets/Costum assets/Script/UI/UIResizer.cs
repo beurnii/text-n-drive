@@ -14,9 +14,7 @@ public class UIResizer : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        #if UNITY_EDITOR
-            Resize();
-        #endif
+
     }
 
     void Resize()
