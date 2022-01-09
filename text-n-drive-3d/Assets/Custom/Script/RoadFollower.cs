@@ -7,23 +7,24 @@ public class RoadFollower : MonoBehaviour
 {
     public Road road;
     public float speed = 0.1f;
-    private float EditorCameraEndPos = 1;
+    public float startPos = 0;
+    public float endPos = 1;
+    private float distance;
     SplineC spline;
     public float verticalOffset = 1;
     public float horizontalOffset = 0;
-    float pos = 0f;
+    public float pos = 0f;
     public bool reverse = false;
     // Start is called before the first frame update
     void Start()
     {
         spline = road.transform.Find("Spline").gameObject.GetComponent<SplineC>();
-        getEndPos();
-
+        distance = endPos - startPos;
     }
 
     void getEndPos()
     {
-        EditorCameraEndPos = spline.nodes[spline.GetNodeCount() - 1].time;
+        endPos = spline.nodes[spline.GetNodeCount() - 1].time;
     }
 
     // Update is called once per frame
@@ -31,11 +32,11 @@ public class RoadFollower : MonoBehaviour
     {
         int direction = reverse ? -1 : 1;
         pos += speed * Time.deltaTime * direction;
-        if (pos > EditorCameraEndPos)
-            pos -= EditorCameraEndPos;
+        if (pos > endPos)
+            pos -= distance;
 
-        if (pos < 0)
-            pos += EditorCameraEndPos;
+        if (pos < startPos)
+            pos += distance;
 
         Vector3 EditorCameraV1;
         Vector3 EditorCameraV2;

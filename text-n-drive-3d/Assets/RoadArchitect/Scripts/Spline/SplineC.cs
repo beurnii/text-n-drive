@@ -104,6 +104,32 @@ namespace RoadArchitect
             }
         }
 
+        public Vector3 getFirstNodePos()
+        {
+            SplineN[] rawNodes = splineRoot.GetComponentsInChildren<SplineN>();
+            List<SplineN> nodeList = new List<SplineN>();
+            int rawNodesLength = rawNodes.Length;
+            if (rawNodesLength == 0)
+            {
+                return new Vector3(0, 0, 0);
+            }
+
+
+            // Stores nodes positions in pos and adds them to nodeList
+            for (int i = 0; i < rawNodesLength; i++)
+            {
+                if (rawNodes[i] != null)
+                {
+                    rawNodes[i].pos = rawNodes[i].transform.position;
+                    nodeList.Add(rawNodes[i]);
+                }
+            }
+
+
+            nodeList.Sort(CompareListByID);
+            return nodeList[0].pos;
+        }
+
 
         /// <summary> Setup Spline values </summary>
         public void Setup()
@@ -136,6 +162,7 @@ namespace RoadArchitect
 
 
             nodeList.Sort(CompareListByID);
+            //nodeList.Add(nodeList[0]);
             //tList.Sort(delegate(SplineC i1, Item i2) { return i1.name.CompareTo(i2.name); });
             rawNodes = nodeList.ToArray();
             nodeList = null;
