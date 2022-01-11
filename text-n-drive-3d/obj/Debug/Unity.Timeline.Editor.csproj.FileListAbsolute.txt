@@ -1,2 +1,0 @@
-C:\Users\BERNARD\Desktop\text-n-drive\text-n-drive-3d\obj\Debug\Unity.Timeline.Editor.csprojAssemblyReference.cache
-C:\Users\BERNARD\Desktop\text-n-drive\text-n-drive-3d\obj\Debug\Unity.Timeline.Editor.csproj.CoreCompileInputs.cache
