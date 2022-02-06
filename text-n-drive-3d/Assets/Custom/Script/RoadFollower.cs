@@ -7,68 +7,73 @@ using UnityEngine.Events;
 
 public class RoadFollower : MonoBehaviour
 {
-    public Road road;
-    public float speed = 10f;
-    public float startPosition = 0;
-    public float endPosition = 1;
-    private float distance;
+    public float speed = 15f;
+    float startPosition = 0;
+    float endPosition = 1;
+    float distance;
     SplineC spline;
-    public float verticalOffset = 1;
-
-
+    public float verticalOffset = 0.52f;
     float horizontalOffset;
-    float desiredOffset;
-    float startingOffset;
     public float position = 0f;
     public bool reverse = false;
-
-    public float leftLane = 1.5f;
-    public float centerLane = 4.25f;
-    public float rightLane = 7.5f;
-
-    public int currentLane = 1;
-    public float lineChangeTime = 0.5f;
-
-    float arrivingTime;
-
-    public bool playersCar = false;
+    public bool performanceMode = true;
+    float[] lanes;
+    LaneController laneController = null;
+    Camera cam;
 
     // Start is called before the first frame update
     void Start()
     {
-        spline = road.transform.Find("Spline").gameObject.GetComponent<SplineC>();
+        spline = GameObject.Find("Spline").gameObject.GetComponent<SplineC>();
+
+        RoadData roadData = GameObject.Find("Road1").gameObject.GetComponent<RoadData>();
+        startPosition = roadData.startPosition;
+        endPosition = roadData.endPosition;
         distance = endPosition - startPosition;
-        switch (currentLane)
-        {
-            case 0:
-                horizontalOffset = leftLane;
-                break;
-            case 1:
-                horizontalOffset = centerLane;
-                break;
-            case 2:
-                horizontalOffset = rightLane;
-                break;
-        }
-        desiredOffset = horizontalOffset;
-    }
 
-    private void OnEnable()
-    {
-        if (playersCar)
-        {
-            SwipeHandler.OnSwipeRight += swipeRightHandler;
-            SwipeHandler.OnSwipeLeft += swipeLeftHandler;
-        }
+        lanes = roadData.lanes;
 
+        laneController = GetComponent<LaneController>();
+        if (laneController)
+        {
+            horizontalOffset = laneController.GetOffset();
+            position = startPosition;
+        }
+        else
+        {
+            int currentLane = Random.Range(0, 3);
+            horizontalOffset = lanes[currentLane];
+            float padding = 0.01f;
+            do {
+                position = Random.Range(startPosition, endPosition);
+            } while (currentLane == 1 
+                     && startPosition + padding > position 
+                     && position > endPosition - padding);
+            reverse = Random.Range(0, 2) == 0;
+            setPosition();
+        }
+        cam = GameObject.Find("PlayerCamera").GetComponent<Camera>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (desiredOffset != horizontalOffset)
-            horizontalOffset = Mathf.Lerp(startingOffset, desiredOffset, 1 - (arrivingTime - Time.time) / lineChangeTime);
+        if (laneController)
+            horizontalOffset = laneController.GetOffset();
+        else {
+            Vector3 screenPoint = cam.WorldToViewportPoint(transform.position);
+            bool onScreen = screenPoint.z > 0 && screenPoint.x > 0 && screenPoint.x < 1 && screenPoint.y > 0 && screenPoint.y < 1;
+            if (!onScreen && performanceMode)
+                return;
+        }
         
+        setPosition();
+
+    }
+
+    void setPosition()
+    {
+        var oldpos = transform.position;
         int direction = reverse ? -1 : 1;
         position += speed / 1000 * Time.deltaTime * direction;
         if (position > endPosition)
@@ -86,33 +91,10 @@ public class RoadFollower : MonoBehaviour
         Vector3 offset = horiMul * horizontalOffset;
 
         this.transform.position = EditorCameraV1 + new Vector3(offset.x, verticalOffset, offset.z);
+        var newpos = transform.position;
+
+        float dist = Vector3.Distance(oldpos, newpos);
+        //Debug.Log(dist / Time.deltaTime);
     }
 
-    void swipeRightHandler()
-    {
-        if (horizontalOffset != desiredOffset)
-            return;
-
-        startingOffset = horizontalOffset;
-        arrivingTime = Time.time + lineChangeTime;
-        switch (currentLane)
-        {
-            case 1: desiredOffset = leftLane; currentLane = 0; break;
-            case 2: desiredOffset = centerLane; currentLane = 1; break;
-        }
-    }
-
-    void swipeLeftHandler()
-    {
-        if (horizontalOffset != desiredOffset)
-            return;
-
-        startingOffset = horizontalOffset;
-        arrivingTime = Time.time + lineChangeTime;
-        switch (currentLane)
-        {
-            case 0: desiredOffset = centerLane; currentLane = 1; break;
-            case 1: desiredOffset = rightLane; currentLane = 2; break;
-        }
-    }
 }

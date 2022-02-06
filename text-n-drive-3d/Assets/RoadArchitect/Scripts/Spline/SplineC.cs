@@ -25,7 +25,7 @@ namespace RoadArchitect
         public SplineF previewSpline;
         [UnityEngine.Serialization.FormerlySerializedAs("PreviewSplineInsert")]
         public SplineI previewSplineInsert;
-
+        float oldParam = 0;
 
         #region "Nav data Vars"
         public float RoadWidth;
@@ -975,8 +975,28 @@ namespace RoadArchitect
                 idx = 0;
             }
 
+            float speed = 10;
+
+            /*var n = nodes[idx];
+            float distance = n.dist - nodes[(idx + 1) % nodeCount].dist;
+            float gap = n.nextTime - n.oldTime;
+            float tmp = distance / speed;
+            float dep = tmp * Time.deltaTime;*/
+
+            /*            for (int i = 0; i <= nodeCount; i++)
+                        {
+                            Debug.Log(i);
+                            Debug.Log((nodes[(i + 1) % nodeCount].dist - nodes[i].dist) / (nodes[i].nextTime - nodes[i].oldTime));
+                        }*/
+
+            //Debug.Log(5);
+
+
             float param = (_value - nodes[idx].time) / (nodes[idx + 1].time - nodes[idx].time);
             param = RootUtils.Ease(param, nodes[idx].easeIO.x, nodes[idx].easeIO.y);
+            /*Debug.Log("Param speed");
+            Debug.Log((param - oldParam) / Time.deltaTime);
+            oldParam = param;*/
 
             _vect1 = GetHermiteInternal(idx, param, false);
             _vect2 = GetHermiteInternal(idx, param, true);
@@ -1265,10 +1285,10 @@ namespace RoadArchitect
             }
 
             //Vectors:
-            Vector3 P0 = nodes[NGI(_i, NI[0])].pos;
-            Vector3 P1 = nodes[NGI(_i, NI[1])].pos;
-            Vector3 P2 = nodes[NGI(_i, NI[2])].pos;
-            Vector3 P3 = nodes[NGI(_i, NI[3])].pos;
+            Vector3 P0 = nodes[NGI(_i, NI[0])].pos; // idx
+            Vector3 P1 = nodes[NGI(_i, NI[1])].pos; // idx+1
+            Vector3 P2 = nodes[NGI(_i, NI[2])].pos; // idx-1
+            Vector3 P3 = nodes[NGI(_i, NI[3])].pos; // idx+2
 
             //Tension:
             tension = 0.5f;
@@ -1337,6 +1357,12 @@ namespace RoadArchitect
          1.0, -2.0,  1.0,  0.0,
          1.0, -1.0,  0.0,  0.0
     };
+/*        private static readonly double[] CM = new double[] {
+         2.0, -3.0,  0.0,  1.0,
+         2.0, -3.0,  0.0,  1.0,
+          2.0, -3.0,  0.0,  1.0,
+          2.0, -3.0,  0.0,  1.0,
+    };*/
 
 
         private static readonly int[] NI = new int[] { 0, 1, -1, 2 };

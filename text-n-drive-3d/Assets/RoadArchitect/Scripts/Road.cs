@@ -458,10 +458,10 @@ namespace RoadArchitect
                 EditorCameraPos = EditorCameraStartPos;
             }
 
-            Debug.Log(EditorCameraPos);
+            //Debug.Log(EditorCameraPos);
             spline.GetSplineValueBoth(EditorCameraPos, out EditorCameraV1, out EditorCameraV2);
-            //Debug.Log(EditorCameraV1);
-            //Debug.Log(EditorCameraV2);
+
+            //Debug.Log(Vector3.Distance(UnityEditor.SceneView.lastActiveSceneView.pivot, EditorCameraV1) / Time.deltaTime);
 
             #if UNITY_EDITOR
             if (Application.isPlaying)
